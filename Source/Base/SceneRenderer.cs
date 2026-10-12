@@ -18,6 +18,7 @@ public class SceneRenderer
 {
     private GraphicsDevice _graphicsDevice;
     private Effect _shadowEffect;
+    private Effect _celShaderEffect;
     private SpriteBatch _spriteBatch;
     private readonly RenderTarget2D[] _shadowMaps = new RenderTarget2D[2];
     private readonly Matrix[] _lightViewMatrix = new Matrix[2];
@@ -29,6 +30,19 @@ public class SceneRenderer
 
     // Light properties
     public Vector3 LightDirection { get; set; }
+
+    /// <summary>
+    /// Selects the lesson's cel-shaded material for the main scene pass.
+    /// The existing shadow effect still creates both shadow maps.
+    /// </summary>
+    public bool CelShadingEnabled { get; set; } = true;
+
+    public float CelLightBands { get; set; } = 4f;
+    public float CelAmbientIntensity { get; set; } = 0.3f;
+    public float CelSpecularThreshold { get; set; } = 0.65f;
+    public float CelRimStrength { get; set; } = 0.35f;
+    public float CelRimPower { get; set; } = 2.5f;
+    public Vector3 CelRimColor { get; set; } = new Vector3(0.4f, 0.55f, 0.7f);
 
     /// <summary>
     /// The sun light position.
@@ -130,6 +144,7 @@ public class SceneRenderer
     public void LoadContent(ContentManager content)
     {
         _shadowEffect = content.Load<Effect>("Effects/ShadowEffect");
+        _celShaderEffect = content.Load<Effect>("Effects/CelShaderEffect");
     }
 
     /// <summary>
@@ -274,17 +289,24 @@ public class SceneRenderer
         var lp0 = Vector3.Normalize(Vector3.TransformNormal(LightPosition0, view));
         var lp1 = Vector3.Normalize(Vector3.TransformNormal(LightPosition1, view));
 
-        Effect effect = _shadowEffect;
+        Effect effect = CelShadingEnabled ? _celShaderEffect : _shadowEffect;
         // TODO: We can cache these parameters when loading the effect for better performance.
         // This will remove a lot of dictionary lookups during rendering.
-        effect.CurrentTechnique = effect.Techniques["RenderTextured"];
+        string techniqueName = CelShadingEnabled ? "RenderCelShaded" : "RenderTextured";
+        effect.CurrentTechnique = effect.Techniques[techniqueName];
         effect.Parameters["LightPosition0"]?.SetValue(lp0);
         effect.Parameters["LightPosition1"]?.SetValue(lp1);
         effect.Parameters["LightColor"]?.SetValue(SunColor * SunIntensity);
-        effect.Parameters["AmbientIntensity"]?.SetValue(0.8f);
+        effect.Parameters["AmbientIntensity"]?.SetValue(
+            CelShadingEnabled ? CelAmbientIntensity : 0.8f);
         effect.Parameters["Color"]?.SetValue(color.ToVector4());
         effect.Parameters["SpecularIntensity"]?.SetValue(entity.SpecularIntensity);
         effect.Parameters["Shininess"]?.SetValue(entity.Shininess);
+        effect.Parameters["LightBands"]?.SetValue(CelLightBands);
+        effect.Parameters["SpecularThreshold"]?.SetValue(CelSpecularThreshold);
+        effect.Parameters["RimStrength"]?.SetValue(CelRimStrength);
+        effect.Parameters["RimPower"]?.SetValue(CelRimPower);
+        effect.Parameters["RimColor"]?.SetValue(CelRimColor);
         effect.Parameters["ShadowMap0"]?.SetValue(_shadowMaps[0]);
         effect.Parameters["ShadowMap1"]?.SetValue(_shadowMaps[1]);
         effect.Parameters["EdgeFadeScale"]?.SetValue(10.0f);
@@ -331,7 +353,7 @@ public class SceneRenderer
                 _graphicsDevice.SetVertexBuffer(part.VertexBuffer);
                 _graphicsDevice.Indices = part.IndexBuffer;
 
-                foreach (EffectPass pass in _shadowEffect.CurrentTechnique.Passes)
+                foreach (EffectPass pass in effect.CurrentTechnique.Passes)
                 {
                     pass.Apply();
                     _graphicsDevice.DrawIndexedPrimitives(PrimitiveType.TriangleList, part.VertexOffset, part.StartIndex, part.PrimitiveCount);

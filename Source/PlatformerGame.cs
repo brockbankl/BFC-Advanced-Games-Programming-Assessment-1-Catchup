@@ -297,6 +297,11 @@ public class PlatformerGame : Game
             {
                 _debugFlags ^= DebugFlags.ShowMetrics;
             }
+            if (InputState.IsKeyPressed(Keys.F4))
+            {
+                // Compare the lesson shader with the starter kit's original lighting.
+                _sceneRenderer.CelShadingEnabled = !_sceneRenderer.CelShadingEnabled;
+            }
             if (InputState.IsKeyPressed(Keys.P))
             {
                 // TODO: print screen.
