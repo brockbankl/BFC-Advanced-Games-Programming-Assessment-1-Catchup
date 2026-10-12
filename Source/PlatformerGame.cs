@@ -228,6 +228,7 @@ public class PlatformerGame : Game
     private void LoadLevel(string level)
     {
         _currentScene = _sceneLoader.LoadScene(level);
+        _currentScene.WeatherParticles.Enabled = true;
         _sceneRenderer.LightDirection = Vector3.Normalize(_currentScene.LightPosition);
         _sceneRenderer.SpecularIntensity = 0.1f;
         _sceneRenderer.Shininess = 0.5f;
@@ -457,7 +458,11 @@ public class PlatformerGame : Game
         // Draw any additional metrics here
         _spriteBatch.DrawString(_debugFont, $"FPS: {1f / (float)gameTime.ElapsedGameTime.TotalSeconds:0.00}", new Vector2(10, 110), Color.White);
         _spriteBatch.DrawString(_debugFont, $"Time Scale: {TimeScale:0.00}", new Vector2(10, 130), Color.White);
-        //_spriteBatch.DrawString(_debugFont, $"Entities: {_entities.Count}", new Vector2(10, 150), Color.White);
+        _spriteBatch.DrawString(
+            _debugFont,
+            $"Weather: {_currentScene.WeatherParticles.ActiveCount} active / {_currentScene.WeatherParticles.VisibleCount} visible",
+            new Vector2(10, 150),
+            Color.White);
         _spriteBatch.DrawString(_debugFont, $"Clear: {GraphicsDevice.Metrics.ClearCount}", new Vector2(10, 170), Color.White);
         _spriteBatch.DrawString(_debugFont, $"Draw: {GraphicsDevice.Metrics.DrawCount}", new Vector2(10, 190), Color.White);
         _spriteBatch.DrawString(_debugFont, $"Primitives: {GraphicsDevice.Metrics.PrimitiveCount}", new Vector2(10, 210), Color.White);
@@ -534,6 +539,7 @@ public class PlatformerGame : Game
 
                 // Draw the scene
                 _currentScene.Draw(gameTime, GraphicsDevice, _sceneRenderer, _postProcessor, _spriteBatch);
+                _currentScene.DrawWeather(_spriteBatch);
 #if DEVMODE
                 if (_debugFlags.HasFlag(DebugFlags.ShowCollisionMesh))
                 {

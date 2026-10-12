@@ -27,6 +27,7 @@ public class Scene
     private Player _player;
     private Dust _dust;
     private Sparkles _sparkles;
+    private WeatherParticleSystem _weatherParticles;
 
     public List<Entity> Entities => _entities;
     public Camera Camera => _camera;
@@ -34,6 +35,7 @@ public class Scene
     public float LightIntensity { get; set; } = 1.0f;
     public Player Player => _player;
     public Dust Dust => _dust;
+    public WeatherParticleSystem WeatherParticles => _weatherParticles;
     public Goal Goal
     {
         get
@@ -69,6 +71,13 @@ public class Scene
         };
         _dust = new Dust(contentManager.Load<Model>("Models/dust"), contentManager);
         _sparkles = new Sparkles(contentManager);
+        _weatherParticles = new WeatherParticleSystem(
+            contentManager,
+            WeatherParticleSettings.CreateSnow())
+        {
+            // PlatformerGame enables weather only for playable levels.
+            Enabled = false
+        };
     }
 
     public void StartCelebration(GameTime gameTime)
@@ -153,6 +162,7 @@ public class Scene
 
         _dust.Update(gameTime);
         _sparkles.Update(gameTime);
+        _weatherParticles.Update(gameTime, _player.Position);
 
         // Update the world entities to let them move and possibly die.
         for (int i = 0; i < _entities.Count; i++)
@@ -252,6 +262,23 @@ public class Scene
             entity.DrawBillboards(_graphicsDevice, spriteBatch, _camera);
         }
         _sparkles.DrawBillboards(_graphicsDevice, spriteBatch, _camera);
+        spriteBatch.End();
+    }
+
+    /// <summary>
+    /// Draws weather after the 3D post-processing pass. Keeping this teaching
+    /// effect in a separate overlay pass avoids inheriting depth and rasterizer
+    /// state from the model renderer.
+    /// </summary>
+    public void DrawWeather(SpriteBatch spriteBatch)
+    {
+        spriteBatch.Begin(
+            SpriteSortMode.Deferred,
+            BlendState.AlphaBlend,
+            SamplerState.LinearClamp,
+            DepthStencilState.None,
+            RasterizerState.CullNone);
+        _weatherParticles.Draw(_graphicsDevice, spriteBatch, _camera);
         spriteBatch.End();
     }
 
