@@ -1,0 +1,198 @@
+[
+    {
+        "type": "SCENE",
+        "background": "#17324D"
+    },
+    {
+        "name": "Lesson5Spawn",
+        "type": "SPAWNPOINT",
+        "position": [0.0, 165.0, 0.0],
+        "rotation": [0.0, 0.0, 45.0]
+    },
+    {
+        "name": "Lesson5Sun",
+        "type": "LIGHT",
+        "position": [900.0, 1800.0, -1200.0],
+        "color": "#D5EEFF",
+        "intensity": 0.9
+    },
+    {
+        "name": "Lesson5Start",
+        "type": "MESH",
+        "instanceof": "platform-grass-large-round",
+        "position": [0.0, 0.0, 0.0],
+        "rotation": [0.0, 0.0, 0.0],
+        "scale": [1.0, 1.0, 1.0],
+        "collidable": true
+    },
+    {
+        "name": "Lesson5Water",
+        "type": "MESH",
+        "instanceof": "rising-water",
+        "position": [0.0, -250.0, 0.0],
+        "rotation": [0.0, 0.0, 0.0],
+        "scale": [8.0, 0.04, 8.0],
+        "color": "#28AFE1",
+        "movespeed": 12.0,
+        "collidable": false
+    },
+    {
+        "name": "Lesson5Step01",
+        "type": "MESH",
+        "instanceof": "platform-medium",
+        "position": [212.0, 75.0, 212.0],
+        "rotation": [0.0, 0.0, 45.0],
+        "scale": [1.0, 1.0, 1.0],
+        "collidable": true
+    },
+    {
+        "name": "Lesson5Step02",
+        "type": "MESH",
+        "instanceof": "platform-medium",
+        "position": [0.0, 150.0, 300.0],
+        "rotation": [0.0, 0.0, 90.0],
+        "scale": [1.0, 1.0, 1.0],
+        "collidable": true
+    },
+    {
+        "name": "Lesson5Step03",
+        "type": "MESH",
+        "instanceof": "platform-medium",
+        "position": [-212.0, 225.0, 212.0],
+        "rotation": [0.0, 0.0, 135.0],
+        "scale": [1.0, 1.0, 1.0],
+        "collidable": true
+    },
+    {
+        "name": "Lesson5Step04",
+        "type": "MESH",
+        "instanceof": "platform-medium",
+        "position": [-300.0, 300.0, 0.0],
+        "rotation": [0.0, 0.0, 180.0],
+        "scale": [1.0, 1.0, 1.0],
+        "collidable": true
+    },
+    {
+        "name": "Lesson5Step05",
+        "type": "MESH",
+        "instanceof": "platform-medium",
+        "position": [-212.0, 375.0, -212.0],
+        "rotation": [0.0, 0.0, 225.0],
+        "scale": [1.0, 1.0, 1.0],
+        "collidable": true
+    },
+    {
+        "name": "Lesson5Step06",
+        "type": "MESH",
+        "instanceof": "platform-medium",
+        "position": [0.0, 450.0, -300.0],
+        "rotation": [0.0, 0.0, 270.0],
+        "scale": [1.0, 1.0, 1.0],
+        "collidable": true
+    },
+    {
+        "name": "Lesson5Step07",
+        "type": "MESH",
+        "instanceof": "platform-medium",
+        "position": [212.0, 525.0, -212.0],
+        "rotation": [0.0, 0.0, 315.0],
+        "scale": [1.0, 1.0, 1.0],
+        "collidable": true
+    },
+    {
+        "name": "Lesson5Step08",
+        "type": "MESH",
+        "instanceof": "platform-medium",
+        "position": [300.0, 600.0, 0.0],
+        "rotation": [0.0, 0.0, 0.0],
+        "scale": [1.0, 1.0, 1.0],
+        "collidable": true
+    },
+    {
+        "name": "Lesson5Step09",
+        "type": "MESH",
+        "instanceof": "platform-medium",
+        "position": [212.0, 675.0, 212.0],
+        "rotation": [0.0, 0.0, 45.0],
+        "scale": [1.0, 1.0, 1.0],
+        "collidable": true
+    },
+    {
+        "name": "Lesson5Step10",
+        "type": "MESH",
+        "instanceof": "platform-medium",
+        "position": [0.0, 750.0, 300.0],
+        "rotation": [0.0, 0.0, 90.0],
+        "scale": [1.0, 1.0, 1.0],
+        "collidable": true
+    },
+    {
+        "name": "Lesson5Step11",
+        "type": "MESH",
+        "instanceof": "platform-medium",
+        "position": [-212.0, 825.0, 212.0],
+        "rotation": [0.0, 0.0, 135.0],
+        "scale": [1.0, 1.0, 1.0],
+        "collidable": true
+    },
+    {
+        "name": "Lesson5Step12",
+        "type": "MESH",
+        "instanceof": "platform-medium",
+        "position": [-300.0, 900.0, 0.0],
+        "rotation": [0.0, 0.0, 180.0],
+        "scale": [1.0, 1.0, 1.0],
+        "collidable": true
+    },
+    {
+        "name": "Lesson5Step13",
+        "type": "MESH",
+        "instanceof": "platform-medium",
+        "position": [-212.0, 975.0, -212.0],
+        "rotation": [0.0, 0.0, 225.0],
+        "scale": [1.0, 1.0, 1.0],
+        "collidable": true
+    },
+    {
+        "name": "Lesson5Step14",
+        "type": "MESH",
+        "instanceof": "platform-medium",
+        "position": [0.0, 1050.0, -300.0],
+        "rotation": [0.0, 0.0, 270.0],
+        "scale": [1.0, 1.0, 1.0],
+        "collidable": true
+    },
+    {
+        "name": "Lesson5Step15",
+        "type": "MESH",
+        "instanceof": "platform-medium",
+        "position": [212.0, 1125.0, -212.0],
+        "rotation": [0.0, 0.0, 315.0],
+        "scale": [1.0, 1.0, 1.0],
+        "collidable": true
+    },
+    {
+        "name": "Lesson5FinishPlatform",
+        "type": "MESH",
+        "instanceof": "platform-grass-large-round",
+        "position": [300.0, 1200.0, 0.0],
+        "rotation": [0.0, 0.0, 0.0],
+        "scale": [1.0, 1.0, 1.0],
+        "collidable": true
+    },
+    {
+        "name": "Lesson5Flag",
+        "type": "MESH",
+        "instanceof": "flag",
+        "position": [300.0, 1235.0, 0.0],
+        "rotation": [0.0, 0.0, 0.0],
+        "scale": [1.0, 1.0, 1.0],
+        "collidable": true
+    },
+    {
+        "name": "Lesson5Goal",
+        "type": "GOAL",
+        "position": [300.0, 1340.0, 0.0],
+        "radius": 120.0
+    }
+]

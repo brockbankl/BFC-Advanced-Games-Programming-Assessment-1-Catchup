@@ -29,6 +29,7 @@ public class SceneLoader
             ["platform-falling"] = (model, content) => new FallingPlatform(model, content),
             ["platform-moving"] = (model, content) => new MovingPlatform(model, content),
             ["coin"] = (model, content) => new Coin(model, content),
+            ["rising-water"] = (model, content) => new RisingWater(model, content),
             ["platform"] = (model, content) => new Platform(model, content),
             ["platform-medium"] = (model, content) => new Platform(model, content),
             ["platform-large"] = (model, content) => new Platform(model, content),
@@ -117,7 +118,11 @@ public class SceneLoader
                             throw new Exception($"No entity factory found for {instanceOf}");
                     }
 
-                    var model = _content.Load<Model>($"Models/{instanceOf}");
+                    // Rising water reuses and flattens the existing round platform mesh.
+                    var modelAsset = instanceOf == "rising-water"
+                        ? "platform-grass-large-round"
+                        : instanceOf;
+                    var model = _content.Load<Model>($"Models/{modelAsset}");
                     var entity = entityFactory(model, _content);
                     entity.SetProperties(entityData);
                     scene.Entities.Add(entity);

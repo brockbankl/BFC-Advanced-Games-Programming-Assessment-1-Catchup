@@ -274,11 +274,11 @@ public class Scene
 
         shadowProcessor.BeginShadowMapPass(0);
         foreach (var entity in _drawList)
-            if (!entity.CastPlacementShadow)
+            if (entity.CastShadow && !entity.CastPlacementShadow)
                 shadowProcessor.DrawEntityToShadowMap(entity);
         shadowProcessor.BeginShadowMapPass(1);
         foreach (var entity in _drawList)
-            if (entity.CastPlacementShadow)
+            if (entity.CastShadow && entity.CastPlacementShadow)
                 shadowProcessor.DrawEntityToShadowMap(entity);
 
         shadowProcessor.EndShadowMapPass();

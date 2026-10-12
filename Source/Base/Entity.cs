@@ -64,6 +64,12 @@ public class Entity
     public bool CastPlacementShadow;
 
     /// <summary>
+    /// Gets a value indicating whether this entity is included in shadow maps.
+    /// Large decorative surfaces such as the lesson water should not shadow the level.
+    /// </summary>
+    public bool CastShadow = true;
+
+    /// <summary>
     /// Gets the bounding box for this entity.
     /// </summary>
     public BoundingBox BoundingBox => _collisionMesh.WorldBoundingBox; // World space bounding box

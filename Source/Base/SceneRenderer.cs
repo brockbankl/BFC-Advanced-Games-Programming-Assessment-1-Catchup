@@ -18,6 +18,8 @@ public class SceneRenderer
 {
     private GraphicsDevice _graphicsDevice;
     private Effect _shadowEffect;
+    private Effect _waterEffect;
+    private Texture2D _waterTexture;
     private SpriteBatch _spriteBatch;
     private readonly RenderTarget2D[] _shadowMaps = new RenderTarget2D[2];
     private readonly Matrix[] _lightViewMatrix = new Matrix[2];
@@ -130,6 +132,8 @@ public class SceneRenderer
     public void LoadContent(ContentManager content)
     {
         _shadowEffect = content.Load<Effect>("Effects/ShadowEffect");
+        _waterEffect = content.Load<Effect>("Effects/WaterEffect");
+        _waterTexture = content.Load<Texture2D>("Textures/water-pattern");
     }
 
     /// <summary>
@@ -239,7 +243,8 @@ public class SceneRenderer
         if (model == null || !entity.Visible)
             return;
 
-        var color = Color.White;
+        var water = entity as RisingWater;
+        var color = water?.TintColor ?? Color.White;
         if (entity is not Player)
         {
             var FadeNear = GameConstants.SHADOW_NEAR_PLANE;
@@ -274,10 +279,11 @@ public class SceneRenderer
         var lp0 = Vector3.Normalize(Vector3.TransformNormal(LightPosition0, view));
         var lp1 = Vector3.Normalize(Vector3.TransformNormal(LightPosition1, view));
 
-        Effect effect = _shadowEffect;
+        Effect effect = water == null ? _shadowEffect : _waterEffect;
         // TODO: We can cache these parameters when loading the effect for better performance.
         // This will remove a lot of dictionary lookups during rendering.
-        effect.CurrentTechnique = effect.Techniques["RenderTextured"];
+        effect.CurrentTechnique = effect.Techniques[
+            water == null ? "RenderTextured" : "RenderWater"];
         effect.Parameters["LightPosition0"]?.SetValue(lp0);
         effect.Parameters["LightPosition1"]?.SetValue(lp1);
         effect.Parameters["LightColor"]?.SetValue(SunColor * SunIntensity);
@@ -285,6 +291,9 @@ public class SceneRenderer
         effect.Parameters["Color"]?.SetValue(color.ToVector4());
         effect.Parameters["SpecularIntensity"]?.SetValue(entity.SpecularIntensity);
         effect.Parameters["Shininess"]?.SetValue(entity.Shininess);
+        effect.Parameters["WaterTint"]?.SetValue(color.ToVector4());
+        effect.Parameters["Time"]?.SetValue(water?.AnimationTime ?? 0f);
+        effect.Parameters["WaterTexture"]?.SetValue(_waterTexture);
         effect.Parameters["ShadowMap0"]?.SetValue(_shadowMaps[0]);
         effect.Parameters["ShadowMap1"]?.SetValue(_shadowMaps[1]);
         effect.Parameters["EdgeFadeScale"]?.SetValue(10.0f);
@@ -326,12 +335,12 @@ public class SceneRenderer
             {
                 // Get the texture from the original effect.
                 BasicEffect originalEffect = part.Effect as BasicEffect;
-                effect.Parameters["Texture"]?.SetValue(originalEffect.Texture);
+                effect.Parameters["Texture"]?.SetValue(originalEffect?.Texture);
 
                 _graphicsDevice.SetVertexBuffer(part.VertexBuffer);
                 _graphicsDevice.Indices = part.IndexBuffer;
 
-                foreach (EffectPass pass in _shadowEffect.CurrentTechnique.Passes)
+                foreach (EffectPass pass in effect.CurrentTechnique.Passes)
                 {
                     pass.Apply();
                     _graphicsDevice.DrawIndexedPrimitives(PrimitiveType.TriangleList, part.VertexOffset, part.StartIndex, part.PrimitiveCount);
