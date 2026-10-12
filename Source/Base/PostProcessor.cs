@@ -6,9 +6,9 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
 /// <summary>
-/// Handles post-processing effects like bloom and vignette.
+/// Handles post-processing effects like bloom, vignette and posterisation.
 /// This class is fairly self contained. It does however
-/// require the relevant shaders to be present in the Content/Effects folder.
+/// require the relevant shaders to be present in Content/Assets/Effects.
 /// </summary>
 public class PostProcessor
 {
@@ -17,13 +17,21 @@ public class PostProcessor
     private RenderTarget2D _bloomExtractTarget;
     private RenderTarget2D _bloomBlurTarget1;
     private RenderTarget2D _bloomBlurTarget2;
+    private RenderTarget2D _postProcessTarget;
 
     private Effect _bloomEffect;
     private Effect _vignetteEffect;
+    private Effect _posterizeEffect;
     private SpriteBatch _spriteBatch;
 
     public bool BloomEnabled { get; set; }
     public bool VignetteEnabled { get; set; }
+
+    // Week 3 addition: leave the existing appearance unchanged until enabled.
+    public bool PosterizeEnabled { get; set; } = false;
+
+    // Number of colour levels per RGB channel. Try 2, 4 and 8.
+    public float PosterizeLevels { get; set; } = 4f;
 
     public PostProcessor(GraphicsDevice graphicsDevice, SpriteBatch spriteBatch)
     {
@@ -38,6 +46,15 @@ public class PostProcessor
     private void CreateRenderTargets()
     {
         var hdrFormat = SurfaceFormat.HdrBlendable;
+
+        // Store the combined image only when the final posterisation pass is used.
+        _postProcessTarget = new RenderTarget2D(
+            _graphicsDevice,
+            _graphicsDevice.PresentationParameters.BackBufferWidth,
+            _graphicsDevice.PresentationParameters.BackBufferHeight,
+            false,
+            SurfaceFormat.Color,
+            DepthFormat.None);
 
         _mainRenderTarget = new RenderTarget2D(
             _graphicsDevice,
@@ -76,6 +93,7 @@ public class PostProcessor
     {
         _bloomEffect = content.Load<Effect>("Effects/BloomEffect");
         _vignetteEffect = content.Load<Effect>("Effects/VignetteEffect");
+        _posterizeEffect = content.Load<Effect>("Effects/PosterizeEffect");
     }
 
     public void BeginScene()
@@ -125,7 +143,8 @@ public class PostProcessor
             _graphicsDevice.SetRenderTarget(null);
         }
 
-        // Cpmbine the main scene with the bloom.
+        // Combine bloom, then overlay vignette. Posterisation needs their finished image.
+        _graphicsDevice.SetRenderTarget(PosterizeEnabled ? _postProcessTarget : null);
         var fullscreen = _graphicsDevice.Viewport.Bounds;
         _spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.Opaque);
         _bloomEffect.CurrentTechnique = _bloomEffect.Techniques["Combine"];
@@ -145,6 +164,18 @@ public class PostProcessor
             _vignetteEffect.Parameters["Smoothness"]?.SetValue(0.99f);
             _vignetteEffect.CurrentTechnique.Passes[0].Apply();
             _spriteBatch.Draw(_mainRenderTarget, fullscreen, Color.Black * 0.8f);
+            _spriteBatch.End();
+        }
+
+        // Week 3 addition: reduce colour levels AFTER bloom and vignette.
+        // Read from a different target to the one we are drawing into.
+        if (PosterizeEnabled)
+        {
+            _graphicsDevice.SetRenderTarget(null);
+            _spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.Opaque);
+            _posterizeEffect.Parameters["Levels"].SetValue(MathHelper.Clamp(PosterizeLevels, 2f, 256f));
+            _posterizeEffect.CurrentTechnique.Passes[0].Apply();
+            _spriteBatch.Draw(_postProcessTarget, fullscreen, Color.White);
             _spriteBatch.End();
         }
     }

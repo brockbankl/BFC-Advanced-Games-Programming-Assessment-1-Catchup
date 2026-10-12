@@ -337,6 +337,10 @@ public class PlatformerGame : Game
             {
                 _postProcessor.VignetteEnabled = !_postProcessor.VignetteEnabled;
             }
+            if (InputState.IsKeyPressed(Keys.T))
+            {
+                _postProcessor.PosterizeEnabled = !_postProcessor.PosterizeEnabled;
+            }
         }
 #endif
 
