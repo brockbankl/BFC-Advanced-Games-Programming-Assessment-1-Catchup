@@ -19,6 +19,8 @@ concurrency:
 jobs:
   analyze:
     name: CodeQL (${{ matrix.language }})
+    # Private student copies may not have the paid private-repository CodeQL feature.
+    if: github.event.repository.private == false
     runs-on: ubuntu-latest
     timeout-minutes: 30
     permissions:

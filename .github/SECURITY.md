@@ -28,3 +28,5 @@ to 4.2.0, while keeping the teaching version of MonoGame pinned.
 Students should keep their own assessment work in their private repositories.
 GitHub settings and branch protections belong to this public repository and
 are not copied when students clone and push to a new independent repository.
+The CodeQL workflow skips private copies so it does not require students to
+purchase private-repository code scanning.
