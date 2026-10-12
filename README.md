@@ -74,6 +74,8 @@ A **branch** keeps a set of changes separate while you develop and test them. A 
 
 A **merge conflict** happens when Git cannot automatically decide how overlapping changes should fit together. Some of these examples change the same parts of the game. Your challenge is to use PRs in **your own private repository**, work out how to resolve the conflicts, and combine all four features into a fully working project. Read the code, make your decisions and test the result as you go.
 
+For a refresher, refer back to the **GitHub video and cheatsheet on the AGP Teams channel**.
+
 Once you have combined the examples, use your own branches and PRs for your modifications. The catchup examples are a starting point for learning; follow the assessment brief for your own work and evidence.
 
 ## Troubleshooting
