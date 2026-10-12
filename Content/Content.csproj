@@ -32,6 +32,9 @@
     <PackageReference Include="MonoGame.Tool.Dxc" />
     <PackageReference Include="MonoGame.Tool.FFmpeg" />
     <PackageReference Include="MonoGame.Tool.FFprobe" />
+    <!-- Keep the shader compiler dependencies free of .NET Core 1.0 packages. -->
+    <PackageReference Include="SharpDX" />
+    <PackageReference Include="SharpDX.D3DCompiler" />
   </ItemGroup>
 
 </Project>

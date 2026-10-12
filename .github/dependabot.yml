@@ -1,0 +1,20 @@
+version: 2
+updates:
+  - package-ecosystem: nuget
+    directories:
+      - /Content
+      - /WindowsDX
+      - /DesktopGL
+      - /DesktopVK
+      - /WindowsDX12
+      - /Android
+      - /iOS
+    schedule:
+      interval: weekly
+    # Keep the course baseline stable; security update PRs remain enabled.
+    open-pull-requests-limit: 0
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: weekly
+    open-pull-requests-limit: 0
