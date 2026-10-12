@@ -16,6 +16,12 @@ resolver backup files. Selected classroom MonoGame changes are on four
 independent branches: `shader`, `particle-effect`, `post-process` and
 `rising-water`. Combining the examples is a student exercise.
 
+Public-repository maintenance adds security policies, pinned CI actions and
+dependency/code scanning. The content builder explicitly uses SharpDX and
+SharpDX.D3DCompiler 4.2.0 to remove old, vulnerable .NET Core 1.0 transitive
+packages. MonoGame remains pinned to the original teaching version, and the
+four lesson code changes remain independent.
+
 ## Original standalone student repository
 
 This standalone repository was created from the contents of `Assessment-1-MonoGame/` in the combined teaching repository.
