@@ -31,3 +31,14 @@ obj/
 __pycache__/
 *.py[cod]
 .venv/
+
+# Local credentials and certificate material.
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*.pfx
+*.p12
+credentials.json
+secrets.json
