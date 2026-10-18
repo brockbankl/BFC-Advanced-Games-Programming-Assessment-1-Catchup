@@ -4,7 +4,42 @@ This is a catchup version of the [original Assessment 1 student repository](http
 
 **Assessment 1 only.** `main` contains the original student MonoGame 3D platformer baseline. Each lesson branch starts from that baseline and contains its own MonoGame code and assets. Make your own **private repository**, then take on the challenge of combining the examples into a working project, like we covered in lesson.
 
-## 1. Clone the project and keep all four branches
+## Start here: copy-and-paste setup
+
+Open **PowerShell** (or a PowerShell terminal in VS Code) and paste the whole block below. You need Git installed and your own GitHub account.
+
+```powershell
+$agpScript = Join-Path $env:TEMP ("AGP-Private-Copy-" + [guid]::NewGuid().ToString('N') + ".ps1")
+Invoke-WebRequest 'https://raw.githubusercontent.com/brockbankl/BFC-Advanced-Games-Programming-Assessment-1-Catchup/main/New-PrivateAssessment1.ps1' -UseBasicParsing -OutFile $agpScript
+if ((Get-FileHash -LiteralPath $agpScript -Algorithm SHA256).Hash -ne '369893373F8FFD40BAFDEE0F03529FEED6E994A758E3D7E8B555DEB6B4AB8F5B') { throw 'The script checksum did not match. Get the current command from the catchup README.' }
+powershell -NoProfile -ExecutionPolicy Bypass -File $agpScript
+```
+
+Choose **1** for automatic setup. Enter a name for your new repository and your **own GitHub username**, then complete GitHub's browser/device sign-in. GitHub CLI is prepared in your user profile if needed; it does not need an administrator installation. The script checks the signed-in account, creates a **private, independent repository**, pushes `main` and all four lesson branches, and verifies them. It sets your commit identity and GitHub credential helper for this clone only.
+
+GitHub sign-in happens through GitHub's browser prompts; do not type your GitHub password into the script. If the browser does not open automatically, follow the device-login URL and one-time code shown in the terminal. Git's `user.name` and `user.email` identify commit authors; they are separate from signing in.
+
+Your project is saved under your Windows **Documents\projects** folder, using the repository name you chose (`AGP-Assessment-1` by default). The script prints the folder and repository URL, and opens the folder in VS Code when available. It will stop rather than overwrite an existing folder or repository. If it stops, keep the complete message visible for your lecturer.
+
+You can also run the included [`New-PrivateAssessment1.ps1`](New-PrivateAssessment1.ps1) from an existing download. This helper copies the separate branches; combining them remains your challenge.
+
+### Netlab PCs: use VS Code Source Control if sign-in is still broken
+
+If the Netlab PCs have not been fixed yet, choose **2** when the script asks for a sign-in method. This downloads the project and prepares all five local branches, then opens VS Code. It leaves the clone ready to publish through VS Code's own GitHub sign-in, without requiring GitHub CLI authentication.
+
+1. Open **Source Control** (`Ctrl+Shift+G`). Select **Publish to GitHub**, or run that command through `Ctrl+Shift+P`.
+2. Sign in to **your GitHub account** when VS Code prompts you. This project is hosted on GitHub.
+3. Choose **Publish to GitHub private repository** and an available repository name. VS Code creates your private repository and publishes the current `main` branch.
+4. Use the branch name in VS Code's bottom status bar to switch to `particle-effect`, `post-process`, `shader` and `rising-water` in turn. For each, use **Publish Branch** in Source Control. This uploads the four separate branches; it does not merge them.
+5. Return to `main`. On GitHub, check that your repository says **Private** and its branch menu contains all five branches.
+
+This fallback uses the VS Code Source Control sign-in route we have been using in the labs. A VS Code sign-in does not necessarily sign GitHub CLI in as well. If terminal sign-in fails during automatic setup, the helper also prepares this VS Code fallback. Refer back to the **GitHub video and cheatsheet on the AGP Teams channel** if you need a refresher.
+
+On shared PCs, sign out of the account you used when you finish, including the browser and VS Code or GitHub CLI as appropriate.
+
+Official guidance: [GitHub CLI browser sign-in](https://cli.github.com/manual/gh_auth_login) and [publishing a private repository from VS Code](https://code.visualstudio.com/docs/sourcecontrol/repos-remotes#_publish-to-github).
+
+## Manual alternative 1: clone the project and keep all four branches
 
 Open PowerShell in `C:\Users\<your-login>\Documents\projects` and run:
 
@@ -21,7 +56,7 @@ git branch
 
 The final command should list `main` and the four lesson branches. A normal clone downloads the remote branches but only creates a local `main`; the four `git branch` commands create local copies ready to push to your own repository. Use a normal clone, without `--single-branch`.
 
-## 2. Make it your own private repository
+## Manual alternative 2: make it your own private repository
 
 1. Sign into your own GitHub account and select **New repository**.
 2. Name it something like `AGP-Assessment-1` and choose **Private**.
@@ -39,9 +74,9 @@ git remote -v
 
 On your new GitHub repository, check that it says **Private** and that its branch menu contains all five branches. You now own an independent copy with the lesson branches included. Keep your assessment work in that private repository and share access with your lecturer as directed.
 
-## 3. Set up and run the starting project
+## Set up and run the starting project
 
-Open the complete `AGP-Assessment-1-Catchup` folder in Visual Studio Code. The root should contain `Platformer3D.slnx`, `Source`, `Content` and `WindowsDX`.
+Open the complete project folder in Visual Studio Code: the folder printed by the helper (`AGP-Assessment-1` by default), or `AGP-Assessment-1-Catchup` if you used the manual clone commands. The root should contain `Platformer3D.slnx`, `Source`, `Content` and `WindowsDX`.
 
 1. Double-click `Setup-Assessment1.cmd` in File Explorer.
 2. Wait for `ASSESSMENT 1 SETUP COMPLETE`.
