@@ -1,6 +1,7 @@
 #include "Macros.hlsl"
 
 float4x4 ModelToView;
+float4x4 ModelToWorld;
 float3x3 NormalToView;
 float4x4 ModelToScreen;
 
@@ -41,7 +42,9 @@ V2P WaterVertexShader(VSInput input)
     output.Position = mul(input.Position, ModelToScreen);
     output.ViewPosition = viewPosition.xyz;
     output.ViewNormal = mul(input.Normal, NormalToView);
-    output.TextureCoords = input.TextureCoords;
+    // The reused platform mesh has colour-atlas UVs. Project its world position
+    // onto the horizontal plane so the water pattern spans the whole surface.
+    output.TextureCoords = mul(input.Position, ModelToWorld).xz * 0.00025f;
     return output;
 }
 
