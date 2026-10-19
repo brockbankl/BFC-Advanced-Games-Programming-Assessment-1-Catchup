@@ -330,6 +330,7 @@ public class SceneRenderer
             effect.Parameters["ModelToLight0"]?.SetValue(lightWorldViewProjMatrix0);
             effect.Parameters["ModelToLight1"]?.SetValue(lightWorldViewProjMatrix1);
             effect.Parameters["ModelToView"]?.SetValue(worldViewMatrix);
+            effect.Parameters["ModelToWorld"]?.SetValue(meshWorld);
 
             foreach (ModelMeshPart part in mesh.MeshParts)
             {
